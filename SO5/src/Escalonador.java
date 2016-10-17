@@ -20,6 +20,11 @@ public class Escalonador {
 			me.gerarRelatorio2(array);
 			me.gerarRelatorio1(array);
 		}
+		if(args[1].equals("SJFP")){
+			array = me.SJFP(te.fila);
+			me.gerarRelatorio1(array);
+			me.gerarRelatorio2(array);
+		}
 		else{
 			System.out.println("Nome inválido de método");
 		}

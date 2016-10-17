@@ -6,6 +6,7 @@ public class Processos {
 	public int prioridade;
 	public int tempoDeExecução;
 	public int tempoDeEspera;
+	public int inicioDeExecucao;
 	public Processos(int id,int tempo_de_entrada,int burstTime,int prioridade){
 		this.id_do_porcesso = id;
 		this.tempo_de_entrada = tempo_de_entrada;

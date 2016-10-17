@@ -25,11 +25,47 @@ public class Metodos {
 			}
 			tempoDeEntrada++;
 		}
-		//r1.m_TempoDeEspera = calc_media();
 		r1.Tempo_total = tempoDeExecucao;
 		return executados;
 	}
 	public ArrayList<Processos> SJF(ArrayList<Processos> processos){
+		r1.cabecalho = "SJF";
+		r1.n_processos = processos.size();
+		Fila filaDeEspera = new Fila();
+		int tempoDeExecucao=0,count=0,burstTimesAnteriores = 0;
+		ArrayList<Processos> executados = new ArrayList<Processos>(); 
+		Processos processo_executando = null;
+		boolean isExecuting = false;
+		for(int i=0;i<processos.size();i++){
+			filaDeEspera.add(processos.get(i));
+		}
+		System.out.println(filaDeEspera.size());
+		while(count<=processos.size()-1){
+				if(!isExecuting){
+					processo_executando = filaDeEspera.get();
+					processo_executando.tempoDeEspera = tempoDeExecucao-processo_executando.tempo_de_entrada;
+					tempoDeExecucao = processar(processo_executando.burstTime,tempoDeExecucao);
+					isExecuting = true;
+				}
+				if(isExecuting){
+					System.out.println(tempoDeExecucao);
+					processo_executando.tempoDeExecução = tempoDeExecucao-processo_executando.tempo_de_entrada;
+					executados.add(processo_executando);
+					burstTimesAnteriores += processo_executando.burstTime;
+					count++;
+					if(count < processos.size()){
+					processo_executando = filaDeEspera.get();
+					tempoDeExecucao = processar(processo_executando.burstTime,tempoDeExecucao);
+					processo_executando.tempoDeEspera = tempoDeExecucao-processo_executando.tempo_de_entrada;
+					}
+					
+			}
+				
+		}		
+		r1.Tempo_total = tempoDeExecucao;
+		return executados;
+	}
+	public ArrayList<Processos> SJFP(ArrayList<Processos> processos){
 		r1.cabecalho = "SJF";
 		r1.n_processos = processos.size();
 		Fila filaDeEspera = new Fila();
@@ -39,31 +75,62 @@ public class Metodos {
 		boolean isExecuting = false;
 		for(int i=0;i<processos.size();i++){
 			filaDeEspera.add(processos.get(i));
-		}
-		while(count<=processos.size()+1){
+		}	
+		System.out.println(filaDeEspera.size());
+		while(count<=processos.size()-1){
 				if(!isExecuting){
-					System.out.println("oi");
 					processo_executando = filaDeEspera.get();
 					processo_executando.tempoDeEspera = tempoDeExecucao-processo_executando.tempo_de_entrada;
+					processo_executando.inicioDeExecucao = tempoDeExecucao;
 					isExecuting = true;
 				}
-				if(tempoDeExecucao == (processo_executando.burstTime - processo_executando.tempoDeEspera)){
-					System.out.println("oi2");
+				if(isExecuting){
+					if(processo_executando.burstTime == tempoDeExecucao-processo_executando.inicioDeExecucao){
 					processo_executando.tempoDeExecução = tempoDeExecucao-processo_executando.tempo_de_entrada;
 					executados.add(processo_executando);
 					count++;
-					processo_executando = filaDeEspera.get();
-					
-			}
-			tempoDeExecucao++;
+						if(count < processos.size()){
+							processo_executando = filaDeEspera.get();
+							processo_executando.tempoDeEspera = tempoDeExecucao-processo_executando.tempo_de_entrada;
+						}
+					}
+						if(processo_executando.burstTime>filaDeEspera.acess().burstTime){
+							processo_executando.burstTime -= tempoDeExecucao + processo_executando.tempo_de_entrada;
+							filaDeEspera.add(processo_executando);
+							processo_executando = filaDeEspera.get();
+							processo_executando.inicioDeExecucao = tempoDeExecucao;
+							processo_executando.tempoDeEspera = tempoDeExecucao-processo_executando.tempo_de_entrada;
+						
+					}	
+				}
+				tempoDeExecucao++;
 				
 		}		
-		//r1.m_TempoDeEspera = calc_media(tempoDeEspera);
 		r1.Tempo_total = tempoDeExecucao;
 		return executados;
 	}
 	public int processar(int bustTime,int tempoDeExecucao){
 		return bustTime+tempoDeExecucao;
+	}
+	public double calc_media_Espera(ArrayList<Processos> array){
+		Processos aux;
+		double count=0;
+		Iterator it  = array.iterator();
+		while (it.hasNext()){
+			aux = (Processos) it.next();
+			count += aux.tempoDeEspera;
+		}
+		return count/array.size();
+	}
+	public double calc_media_TurnAround(ArrayList<Processos> array){
+		Processos aux;
+		double count=0;
+		Iterator it  = array.iterator();
+		while (it.hasNext()){
+			aux = (Processos) it.next();
+			count += aux.tempoDeExecução;
+		}
+		return count/array.size();
 	}
 	public void gerarRelatorio2(ArrayList<Processos> array){
 		System.out.println("Relatório 2");
@@ -76,7 +143,8 @@ public class Metodos {
 		}
 	}
 	public void gerarRelatorio1(ArrayList<Processos> array){
-		//r1.m_TurnAround = calc_media(map);
+		r1.m_TurnAround = calc_media_TurnAround(array);
+		r1.m_TempoDeEspera = calc_media_Espera(array);
 		r1.m_Thoroughput = 1;
 		r1.gerar_relatorio();
 	}
