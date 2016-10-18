@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 
@@ -9,6 +10,7 @@ public class Escalonador {
 		ArrayList<Processos> array ;
 		Metodos me = new Metodos();
 		String arquivo = args[0];
+		ProcessComparator pc = new ProcessComparator();
 		te.lerCsv(arquivo);
 		if(args[1].equals("FCFS")){
 			array = me.FCFS(te.fila);
@@ -22,6 +24,18 @@ public class Escalonador {
 		}
 		if(args[1].equals("SJFP")){
 			array = me.SJFP(te.fila);
+			me.gerarRelatorio1(array);
+			me.gerarRelatorio2(array);
+		}
+		if (args[1].equals("PriorityP")){
+			array = me.PriorityP(te.fila);
+			me.gerarRelatorio1(array);
+			me.gerarRelatorio2(array);
+
+		}
+		if(args[1].equals("PriorityNP")){
+			Collections.sort(te.fila,pc);
+			array = me.PriorityNP(te.fila);
 			me.gerarRelatorio1(array);
 			me.gerarRelatorio2(array);
 		}

@@ -30,4 +30,10 @@ public class Fila {
 	public int size(){
 		return fila.size();
 	}
+	public boolean isEmpty(){
+		if(inicio == fim){
+			return true;
+		}
+		return false;
+	}
 }
