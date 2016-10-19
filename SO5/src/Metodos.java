@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -26,6 +28,7 @@ public class Metodos {
 			}
 			tempoDeEntrada++;
 		}
+		r1.m_TrocaDeContexto = 1;
 		r1.Tempo_total = tempoDeExecucao;
 		return executados;
 	}
@@ -62,7 +65,8 @@ public class Metodos {
 					
 			}
 				
-		}		
+		}
+		r1.m_TrocaDeContexto = 1;
 		r1.Tempo_total = tempoDeExecucao;
 		return executados;
 	}
@@ -144,7 +148,7 @@ public class Metodos {
 		return processesConcluded;
 	
 	}
-	public ArrayList<Processos> PriorityP(ArrayList<Processos> processos){
+	public ArrayList<Processos> PriorityNP(ArrayList<Processos> processos){
 		r1.cabecalho = "PriorityP";
 		r1.n_processos = processos.size();
 		int tempoDeExecucao = 0;
@@ -158,17 +162,20 @@ public class Metodos {
 				aux.tempoDeExecução = tempoDeExecucao - aux.tempo_de_entrada;
 				executados.add(aux);			
 			}
-		r1.Tempo_total = tempoDeExecucao;	
+		r1.Tempo_total = tempoDeExecucao;
+		r1.m_TrocaDeContexto = 1;
 		return executados;
 	}
-	public ArrayList<Processos> PriorityNP(ArrayList<Processos> processos){
-		SortBurstTime sb = new SortBurstTime();
+	public ArrayList<Processos> PriorityP(ArrayList<Processos> processos){
+		r1.cabecalho = "Priority Preemptivo";
+		ProcessComparator sb = new ProcessComparator();
 		int currentTime = 0;
 		Processos previousProcess;
 		ArrayList<Processos> processesArrived = new ArrayList<Processos>();
 		ArrayList<Processos> processesConcluded = new ArrayList<Processos>();
 		// primeiro processo da lista de processos
 		currentTime = processos.get(0).tempo_de_entrada;
+		processos.get(0).trocaDeContexto++;
 		processesArrived.add(processos.remove(0));
 		//this.processesArrived.get(0).setWaitingTime(0);
 		previousProcess = processesArrived.get(0);
@@ -189,6 +196,8 @@ public class Metodos {
 						if(p.prioridade<processesArrived.get(0).prioridade){
 							processesArrived.get(0).setInterrupted(true);
 							processesArrived.get(0).setLastTimeExecuting(currentTime);
+							processesArrived.get(0).trocaDeContexto++;
+							
 							//sortListByBurstTime(this.processesArrived);
 						}
 					}
@@ -222,7 +231,7 @@ public class Metodos {
 			
 			// verifica se o processo ja executou por completo
 			if(processesArrived.get(0).tempoDeExecução == processesArrived.get(0).burstTime){
-				
+				processesArrived.get(0).tempoDeExecução = processesArrived.get(0).tempoDeExecução + currentTime;
 				processesConcluded.add(processesArrived.remove(0));
 			}
 			
@@ -235,8 +244,53 @@ public class Metodos {
 		}
 		r1.Tempo_total = currentTime;
 		r1.n_processos = processesConcluded.size();
+		r1.m_TrocaDeContexto = calc_media_TDC(processesConcluded);
 		return processesConcluded;
-	
+	}
+	public ArrayList<Processos> RR (ArrayList<Processos> processos,int quantun){
+		r1.cabecalho = "Round Robin";
+		r1.n_processos = processos.size();
+		ArrayList<Processos> executados = new ArrayList<Processos>();
+		Fila filaDeEspera = new Fila();
+		Processos aux = null;
+		int currentTime = 0;
+		for(Processos p : processos){
+			filaDeEspera.add(p);
+		}
+		while(true){
+			aux = filaDeEspera.get();
+			//System.out.println(aux.burstTime);
+			currentTime += executarQuantun(aux.burstTime, quantun);
+			aux.burstTime = aux.burstTime - executarQuantun(aux.burstTime, quantun);
+			aux.trocaDeContexto++;
+			//System.out.println(aux.burstTime);
+			if(aux.burstTime == 0){
+				//System.out.println("id"+aux.id_do_porcesso+"#");
+				aux.tempoDeExecução = currentTime;
+				aux.tempoDeEspera = currentTime - aux.tempo_de_entrada;
+				executados.add(aux);
+			}
+			else{
+				filaDeEspera.add(aux);
+				//System.out.println("id"+aux.id_do_porcesso);
+				//System.out.println("oi");
+			}
+			if(filaDeEspera.isEmpty()){
+				break;
+			}
+		}
+		r1.m_TrocaDeContexto = calc_media_TDC(executados);
+		r1.Tempo_total = currentTime;
+		return executados;
+		
+	}
+	public int executarQuantun(int burstTime,int quantun){
+		if(burstTime<=quantun){
+			return burstTime;
+		}
+		else{
+			return quantun;
+		}
 	}
 	public int processar(int bustTime,int tempoDeExecucao){
 		return bustTime+tempoDeExecucao;
@@ -261,15 +315,40 @@ public class Metodos {
 		}
 		return count/array.size();
 	}
-	public void gerarRelatorio2(ArrayList<Processos> array){
-		System.out.println("Relatório 2");
+	public double calc_media_TDC(ArrayList<Processos> array){
 		Processos aux;
+		double count=0;
+		Iterator it  = array.iterator();
+		while (it.hasNext()){
+			aux = (Processos) it.next();
+			count += aux.trocaDeContexto;
+		}
+		return count/array.size();
+	}
+	public void gerarRelatorio2(ArrayList<Processos> array){
+		Processos aux;
+		try {
+			PrintWriter writer = new PrintWriter("relatorio.txt");
+			writer.println("Relatório 2");
+			Iterator it  = array.iterator();
+			while(it.hasNext()){
+				aux = (Processos) it.next();
+			    writer.println("Processo: "+aux.id_do_porcesso);
+			    writer.println("Tempo: "+aux.tempoDeExecução);
+			}
+			System.out.println("Relatório 2 gerado no arquivo relatorio.txt");
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		/*System.out.println("Relatório 2");
+		//Processos aux;
 		Iterator it  = array.iterator();
 		while(it.hasNext()){
 			aux = (Processos) it.next();
 		    System.out.println("Processo: "+aux.id_do_porcesso);
 		    System.out.println("Tempo: "+aux.tempoDeExecução);
-		}
+		}*/
 	}
 	public void gerarRelatorio1(ArrayList<Processos> array){
 		r1.m_TurnAround = calc_media_TurnAround(array);

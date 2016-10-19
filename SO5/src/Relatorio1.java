@@ -17,6 +17,7 @@ public class Relatorio1 {
 		System.out.println("Tempo de Thoroughput "+ m_Thoroughput);
 		System.out.println("Media de TurnAround "+m_TurnAround);
 		System.out.println("Media de Espera "+m_TempoDeEspera);
+		System.out.println("Media de Troca de Contexto"+m_TrocaDeContexto);
 		System.out.println("Número de processos "+n_processos);
 		
 	}

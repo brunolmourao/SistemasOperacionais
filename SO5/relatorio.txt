@@ -1,0 +1,9 @@
+Relatório 2
+Processo: 3
+Tempo: 15
+Processo: 1
+Tempo: 25
+Processo: 2
+Tempo: 50
+Processo: 4
+Tempo: 75

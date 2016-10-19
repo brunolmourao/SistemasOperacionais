@@ -39,6 +39,12 @@ public class Escalonador {
 			me.gerarRelatorio1(array);
 			me.gerarRelatorio2(array);
 		}
+		if (args[1].equals("RR")){
+			array = me.RR(te.fila,Integer.parseInt(args[2]));
+			me.gerarRelatorio1(array);
+			me.gerarRelatorio2(array);
+
+		}
 		else{
 			System.out.println("Nome inválido de método");
 		}

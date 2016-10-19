@@ -7,6 +7,7 @@ public class Processos {
 	public int tempoDeExecução;
 	public int tempoDeEspera;
 	public int inicioDeExecucao;
+	public int trocaDeContexto;
 	private boolean isInterrupted = false;
 	private int lastTimeExecuting ;
 	public Processos(int id,int tempo_de_entrada,int burstTime,int prioridade){
@@ -16,6 +17,7 @@ public class Processos {
 		this.prioridade = prioridade;
 		this.lastTimeExecuting = 0;
 		this.tempoDeExecução = 0;
+		this.trocaDeContexto = 0;
 	}
 	public void setInterrupted(boolean b){
 		isInterrupted = b;
