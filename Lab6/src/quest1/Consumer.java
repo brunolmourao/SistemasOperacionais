@@ -1,3 +1,4 @@
+package quest1;
 import java.util.Random;
 public class Consumer implements Runnable {
 	private final Dropbox dropbox;

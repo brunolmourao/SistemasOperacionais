@@ -1,8 +1,5 @@
+package quest1;
 import java.util.Random;
-/**
- * @author 362987
- *
- */
 public class Producer implements Runnable {
 	private Dropbox dropbox;
 	public Producer(Dropbox dropbox) {
