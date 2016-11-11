@@ -21,12 +21,10 @@ public class Philosopher implements Runnable {
 	@Override
 	public void run() {
 		while (true){
-			//for(int i=0;i<5;i++){
 			monitor.takeForks(id);
 			eating();
 			monitor.returnForks(id);
 			thinking();
-			//}	
 		}
 			
 		

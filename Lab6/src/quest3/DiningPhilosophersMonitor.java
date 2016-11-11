@@ -24,15 +24,11 @@ public class DiningPhilosophersMonitor {
         states[i] = State.HUNGRY;
         test(i);
         if(states[i] != State.EATING){
-        	//lock.lock();
             try {
             	synchronized(this.self[i]){
                 self[i].wait();
             	}
             } catch (InterruptedException e) {}
-            finally{
-            	//lock.unlock();
-            }
         }
     }
     
