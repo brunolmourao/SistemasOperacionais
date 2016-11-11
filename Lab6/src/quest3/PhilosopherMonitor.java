@@ -1,10 +1,10 @@
 package quest3;
 
-public class Philosopher implements Runnable {
+public class PhilosopherMonitor implements Runnable{
 	private int id;
 	private String name;
-	DiningPhilosophersSemaphore monitor;
-	public Philosopher(int id,String name,DiningPhilosophersSemaphore monitor) {
+	DiningPhilosophersMonitor monitor;
+	public PhilosopherMonitor(int id,String name,DiningPhilosophersMonitor monitor) {
 		this.id = id;
 		this.name = name;
 		this.monitor = monitor;
