@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class TratadorDeEntrada {
-	public ArrayList<Integer> processar(String entrada){
-		ArrayList<Integer> Saida = new ArrayList<Integer>();
+	public int[] processar(String entrada){
+		int[] Saida = new int[12];
+		int count = 0;
 		 StringTokenizer st = new StringTokenizer(entrada, ",");
 		 String aux;
 	        while (st.hasMoreTokens()) { 
 	        	aux = st.nextToken().toString();
-	        	Saida.add(Integer.parseInt(aux));
+	        	Saida[count] = Integer.parseInt(aux);
+	        	count++;
 	            }
 	        return Saida;
 	        }

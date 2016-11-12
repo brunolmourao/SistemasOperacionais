@@ -10,10 +10,10 @@ public class Main {
 	public static void main(String[] args) {
 		TratadorDeEntrada tc = new TratadorDeEntrada();
 		Algoritimos alg = new Algoritimos();
-		ArrayList<Integer> Entradas = new ArrayList<Integer>();
+		int[] Entradas;
 		String Entrada = "1,2,3,4,1,2,5,1,2,3,4,5";
 		Entradas = tc.processar(Entrada);
-		alg.FIFO(Entradas, TamanhoDoFrame);
+		alg.LFU(Entradas, TamanhoDoFrame);
 
 	}
 
