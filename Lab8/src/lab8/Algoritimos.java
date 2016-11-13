@@ -103,6 +103,76 @@ public class Algoritimos {
 		}
 		System.out.println("Total de PageFault "+pageFault);
 	}
+	public void MFU(int[] Entradas,int TamanhoDaMemoria){
+		String nome = "MFU";
+		int[] Memoria = new int[TamanhoDaMemoria];
+		int[] Contador = new int [6];
+		for(int i=0;i<TamanhoDaMemoria;i++){
+			Memoria[i] = 0;
+		}
+		for(int i=0;i<6;i++){
+			Contador[i] = 0;
+		}
+		int aux,count = 0,pageFault = 0,max;
+		for(int i=0;i<Entradas.length;i++){
+			aux = Entradas[i];
+			if(count<TamanhoDaMemoria){
+				Memoria[count] = aux;
+				Contador[aux]++;
+				printVector(Memoria,nome);
+				count++;
+				pageFault++;
+			}
+			if(count >= TamanhoDaMemoria){
+				if(checkVector(Memoria,aux,TamanhoDaMemoria)){
+					printVector(Memoria,nome);
+					Contador[aux]++;
+				}
+				else{
+					max = maxVector(Contador,TamanhoDaMemoria);
+					Memoria[max] = aux;
+					Contador[aux]++;
+					pageFault++;
+					printVector(Memoria,nome);
+				}	
+			}
+			
+			
+		}
+		System.out.println("Total de PageFault "+pageFault);
+	}
+	public void Otimo (int[] Entradas,int TamanhoDaMemoria){
+		String nome = "Otimo";
+		int[] Memoria = new int[TamanhoDaMemoria];
+		for(int i=0;i<TamanhoDaMemoria;i++){
+			Memoria[i] = 0;
+		}
+		int aux,count = 0,pageFault = 0,min;
+		for(int i=0;i<Entradas.length;i++){
+			aux = Entradas[i];
+			if(count<TamanhoDaMemoria){
+				Memoria[count] = aux;
+				printVector(Memoria,nome);
+				count++;
+				pageFault++;
+			}
+			if(count >= TamanhoDaMemoria){
+				if(checkVector(Memoria,aux,TamanhoDaMemoria)){
+					printVector(Memoria,nome);
+				}
+				else{
+					min = frequencia(Entradas,count,Memoria,TamanhoDaMemoria);
+					Memoria[min] = aux;
+					count++;
+					pageFault++;
+					printVector(Memoria,nome);
+				}	
+			}
+			
+			
+		}
+		System.out.println("Total de PageFault "+pageFault);
+	}
 	public boolean checkVector(int[] Memoria,int x,int tamanho){
 		for(int i=0;i<tamanho;i++){
 			if(Memoria[i] == x){
@@ -110,6 +180,25 @@ public class Algoritimos {
 			}
 		}
 		return false;
+	}
+	public int frequencia(int[] Entradas,int indicie,int[] Memoria,int TamanhoMemoria){
+		int[] frequencia = new int[6];
+		int min;
+		for(int i=0;i<6;i++){
+			frequencia[i] = 0;
+		}
+		for(int i=indicie;i<Entradas.length;i++){
+			frequencia[Entradas[i]]++;
+		}
+		while(true){
+			min =  minVector(frequencia,6);
+			if(checkVector(Memoria,min,TamanhoMemoria)){
+				return indicie(Memoria,min);
+			}
+			else{
+				frequencia[min] = frequencia[min] + 99999;
+			}
+		}
 	}
 	public void printVector (int[] Vector,String Nome){
 		System.out.println(Nome);
@@ -138,7 +227,15 @@ public class Algoritimos {
 				indicie = i;
 			}
 		}
-		return max;
+		return indicie;
+	}
+	public int indicie(int[]Memoria,int x){
+		for(int i=0;i<Memoria.length;i++){
+			if(Memoria[i]==x){
+				return i;
+			}
+		}
+		return 0;
 	}
 
 }
