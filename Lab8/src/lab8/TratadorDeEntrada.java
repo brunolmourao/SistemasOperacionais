@@ -1,6 +1,5 @@
 package lab8;
 
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class TratadorDeEntrada {

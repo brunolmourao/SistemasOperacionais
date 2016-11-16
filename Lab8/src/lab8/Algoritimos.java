@@ -1,8 +1,5 @@
 package lab8;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 public class Algoritimos {
 	public void FIFO (int[]Entradas,int TamanhoDaMemoria){
 		String nome = "FIFO";
@@ -10,7 +7,8 @@ public class Algoritimos {
 		for(int i=0;i<TamanhoDaMemoria;i++){
 			Memoria[i] = 0;
 		}
-		int aux,firstIn = 0,count = 0,pageFault = 0;
+		int aux,firstIn = 0,pageFault = 0;
+		double	TempoDePageFault,TempoDeExecucao;
 		for(int i=0;i<Entradas.length;i++){
 			aux = Entradas[i];
 				if(checkVector(Memoria,aux,TamanhoDaMemoria)){
@@ -27,8 +25,10 @@ public class Algoritimos {
 					printVector(Memoria,nome);
 				}	
 			}
-			
+		TempoDePageFault = 	pageFault*0.002;
+		TempoDeExecucao = TempoDePageFault + (Entradas.length - pageFault)*0.0000002;
 		System.out.println("Total de PageFault "+pageFault);
+		System.out.println("Razão : "+TempoDePageFault/TempoDeExecucao);
 	}
 	public void LRU(int[]Entradas,int TamanhoDaMemoria){
 		String nome = "LRU";
@@ -38,7 +38,7 @@ public class Algoritimos {
 			Memoria[i] = 0;
 			Contador[i] = 0;
 		}
-		int aux,count = 0,pageFault = 0,min,clock = 0;
+		int aux,count = 0,pageFault = 0,min,clock = 0,TempoDePageFault;
 		for(int i=0;i<Entradas.length;i++){
 			aux = Entradas[i];
 			if(count<TamanhoDaMemoria){
@@ -63,6 +63,7 @@ public class Algoritimos {
 			clock++;
 			
 		}
+		TempoDePageFault = 	pageFault*2;
 		System.out.println("Total de PageFault "+pageFault);
 	}
 	public void LFU(int[] Entradas,int TamanhoDaMemoria){
@@ -75,7 +76,7 @@ public class Algoritimos {
 		for(int i=0;i<6;i++){
 			Contador[i] = 0;
 		}
-		int aux,count = 0,pageFault = 0,min;
+		int aux,count = 0,pageFault = 0,min,TempoDePageFault;
 		for(int i=0;i<Entradas.length;i++){
 			aux = Entradas[i];
 			if(count<TamanhoDaMemoria){
@@ -101,6 +102,7 @@ public class Algoritimos {
 			
 			
 		}
+		TempoDePageFault = 	pageFault*2;
 		System.out.println("Total de PageFault "+pageFault);
 	}
 	public void MFU(int[] Entradas,int TamanhoDaMemoria){
@@ -113,7 +115,7 @@ public class Algoritimos {
 		for(int i=0;i<6;i++){
 			Contador[i] = 0;
 		}
-		int aux,count = 0,pageFault = 0,max;
+		int aux,count = 0,pageFault = 0,max,TempoDePageFault;
 		for(int i=0;i<Entradas.length;i++){
 			aux = Entradas[i];
 			if(count<TamanhoDaMemoria){
@@ -139,6 +141,7 @@ public class Algoritimos {
 			
 			
 		}
+		TempoDePageFault = 	pageFault*2;
 		System.out.println("Total de PageFault "+pageFault);
 	}
 	public void Otimo (int[] Entradas,int TamanhoDaMemoria){
@@ -147,7 +150,7 @@ public class Algoritimos {
 		for(int i=0;i<TamanhoDaMemoria;i++){
 			Memoria[i] = 0;
 		}
-		int aux,count = 0,pageFault = 0,min;
+		int aux,count = 0,pageFault = 0,min,TempoDePageFault;
 		for(int i=0;i<Entradas.length;i++){
 			aux = Entradas[i];
 			if(count<TamanhoDaMemoria){
@@ -171,6 +174,7 @@ public class Algoritimos {
 			
 			
 		}
+		TempoDePageFault = 	pageFault*2;
 		System.out.println("Total de PageFault "+pageFault);
 	}
 	public boolean checkVector(int[] Memoria,int x,int tamanho){

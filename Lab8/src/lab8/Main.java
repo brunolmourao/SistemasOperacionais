@@ -1,9 +1,5 @@
 package lab8;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-
 public class Main {
 
 	private static int TamanhoDoFrame = 3;
@@ -13,7 +9,7 @@ public class Main {
 		int[] Entradas;
 		String Entrada = "1,2,3,4,1,2,5,1,2,3,4,5";
 		Entradas = tc.processar(Entrada);
-		alg.Otimo(Entradas, TamanhoDoFrame);
+		alg.FIFO(Entradas, TamanhoDoFrame);
 
 	}
 
