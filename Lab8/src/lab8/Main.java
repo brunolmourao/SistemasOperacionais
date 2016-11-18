@@ -9,7 +9,7 @@ public class Main {
 		int[] Entradas;
 		String Entrada = "1,2,3,4,1,2,5,1,2,3,4,5";
 		Entradas = tc.processar(Entrada);
-		alg.FIFO(Entradas, TamanhoDoFrame);
+		alg.Otimo(Entradas, TamanhoDoFrame);
 
 	}
 
